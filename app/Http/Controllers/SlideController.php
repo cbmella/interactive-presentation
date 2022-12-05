@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Slide;
 use App\Http\Requests\StoreSlideRequest;
 use App\Http\Requests\UpdateSlideRequest;
+use App\Models\Presentation;
 use Inertia\Inertia;
 
 class SlideController extends Controller
@@ -85,5 +86,15 @@ class SlideController extends Controller
     public function destroy(Slide $slide)
     {
         //
+    }
+
+    public function next(Slide $slide)
+    {
+        if ($slide->nextSlide()) {
+            return redirect()->route('slides.show', $slide->nextSlide());
+        }
+
+        //aca mandar a la vista de score
+        return redirect()->route('slides.show',  $slide->lastSlide());
     }
 }

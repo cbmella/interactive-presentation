@@ -19,4 +19,19 @@ class Slide extends Model
         'updated_at',
         'presentation_id'
     ];
+
+    public function presentation()
+    {
+        return $this->belongsTo(Presentation::class);
+    }
+
+    public function nextSlide()
+    {
+        return $this->presentation->slides()->where('id', '>', $this->id)->first();
+    }
+
+    public function lastSlide()
+    {
+        return $this->presentation->slides()->orderBy('id', 'desc')->first();
+    }
 }

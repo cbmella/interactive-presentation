@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Presentation;
 use App\Http\Requests\StorePresentationRequest;
 use App\Http\Requests\UpdatePresentationRequest;
+use App\Models\Slide;
 use Inertia\Inertia;
 
 class PresentationController extends Controller
@@ -85,5 +86,10 @@ class PresentationController extends Controller
     public function destroy(Presentation $presentation)
     {
         //
+    }
+
+    public function ready(Presentation $presentation)
+    {
+        return redirect()->route('slides.show', $presentation->firstSlide());
     }
 }

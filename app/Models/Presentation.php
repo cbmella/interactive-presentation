@@ -22,4 +22,9 @@ class Presentation extends Model
     {
         return $this->hasMany(Slide::class);
     }
+
+    public function firstSlide()
+    {
+        return $this->slides()->first();
+    }
 }

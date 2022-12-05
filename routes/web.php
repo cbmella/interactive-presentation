@@ -19,7 +19,14 @@ use Inertia\Inertia;
 */
 
 Route::resource('presentations', PresentationController::class);
+Route::get('presentations/ready/{presentation}', [PresentationController::class, 'ready'])->name('presentations.ready');
+
+
+
+
 Route::resource('slides', SlideController::class);
+Route::get('slides/next/{slide}', [SlideController::class, 'next'])->name('slides.next');
+
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
