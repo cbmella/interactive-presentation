@@ -3,30 +3,25 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PresentationController;
 use App\Http\Controllers\SlideController;
+use App\Http\Controllers\PlayerController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
 Route::resource('presentations', PresentationController::class);
+
+Route::get('presentations/{presentation}/player/{player}', [PresentationController::class, 'player'])->name('presentations.player');
 Route::get('presentations/ready/{presentation}', [PresentationController::class, 'ready'])->name('presentations.ready');
-
-
-
 
 Route::resource('slides', SlideController::class);
 Route::get('slides/next/{slide}', [SlideController::class, 'next'])->name('slides.next');
 
+Route::middleware('checktoken')->group(function () {
+    Route::get('players/wait', [PlayerController::class, 'wait'])->name('players.wait');
+    Route::resource('players', PlayerController::class);
+    Route::get('players/{player}/token/{token}', [PlayerController::class, 'generate'])->name('players.generate');
+    Route::put('players/{player}', [PlayerController::class, 'next'])->name('players.next');
+});
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -35,7 +30,7 @@ Route::get('/', function () {
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
     ]);
-});
+})->name('welcome');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
@@ -47,4 +42,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

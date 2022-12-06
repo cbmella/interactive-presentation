@@ -1,9 +1,18 @@
 <script setup>
+import { ref, onMounted } from 'vue'
 import { Head, Link } from '@inertiajs/inertia-vue3';
 
 defineProps({
   presentation: Object,
 });
+
+/* onMounted(() => {
+  console.log('mounted');
+  window.Echo.channel('activeSlide').listen('player', (e) => {
+      console.log(e);
+    });
+}); */
+
 </script>
 
 <template>

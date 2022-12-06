@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Presentation;
+use App\Models\Player;
 use App\Http\Requests\StorePresentationRequest;
 use App\Http\Requests\UpdatePresentationRequest;
-use App\Models\Slide;
+use App\Services\SlideService;
 use Inertia\Inertia;
 
 class PresentationController extends Controller
@@ -49,9 +50,9 @@ class PresentationController extends Controller
      */
     public function show(Presentation $presentation)
     {
-        return Inertia::render('Presentation', [
+        /*         return Inertia::render('Presentation', [
             'presentation' => $presentation,
-        ]);
+        ]); */
     }
 
     /**
@@ -88,8 +89,27 @@ class PresentationController extends Controller
         //
     }
 
-    public function ready(Presentation $presentation)
+    public function player(Presentation $presentation, $player)
     {
-        return redirect()->route('slides.show', $presentation->firstSlide());
+        $player = Player::firstOrCreate(
+            ['key' => $player],
+            ['key' => $player]
+        );
+
+        $player->tokens()->delete();
+        $token = $player->createToken('player-token')->plainTextToken;
+        session([
+            'player' => $player,
+            'token' => $token,
+        ]);
+        return Inertia::render('Presentation', [
+            'presentation' => $presentation,
+        ]);
+    }
+
+    public function ready(Presentation $presentation, SlideService $slideService)
+    {
+        $slide = $slideService->getSlide($presentation->firstSlide());
+        return redirect()->route('slides.show', $slide);
     }
 }
