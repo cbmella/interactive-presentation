@@ -19,7 +19,7 @@ Route::get('slides/next/{slide}', [SlideController::class, 'next'])->name('slide
 Route::middleware('checktoken')->group(function () {
     Route::get('players/wait', [PlayerController::class, 'wait'])->name('players.wait');
     Route::resource('players', PlayerController::class);
-    Route::get('players/{player}/token/{token}', [PlayerController::class, 'generate'])->name('players.generate');
+    Route::get('players/{token}/generate', [PlayerController::class, 'generate'])->name('players.generate');
     Route::put('players/{player}', [PlayerController::class, 'next'])->name('players.next');
 });
 

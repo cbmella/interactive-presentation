@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Player;
 use App\Http\Requests\StorePlayerRequest;
 use App\Http\Requests\UpdatePlayerRequest;
+use Laravel\Sanctum\PersonalAccessToken;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
+use Illuminate\Http\Request;
 
 class PlayerController extends Controller
 {
@@ -55,24 +57,25 @@ class PlayerController extends Controller
     }
 
 
-    public function generate(Player $player, $token)
+    public function generate($token)
     {
+        $personal_access_token = PersonalAccessToken::findToken($token);
+        $player = $personal_access_token->tokenable;
+
         session([
-            'player' => $player,
             'token' => $token,
+            'player' => $player
         ]);
 
         $avatar = Str::random(10);
 
-        $data = [
+        return Inertia::render('Player', [
             'name' => Http::get('https://randomuser.me/api/')->json()['results'][0]['name']['title'] . ' ' .  Http::get('https://randomuser.me/api/')->json()['results'][0]['name']['first'] . ' ' . Http::get('https://randomuser.me/api/')->json()['results'][0]['name']['last'],
             'avatar' => Http::get('https://api.multiavatar.com/' . $avatar . '.svg')->body(),
             'url' => 'https://api.multiavatar.com/' . $avatar . '.svg',
             'player' => session('player'),
             'token' => session('token')
-        ];
-
-        return Inertia::render('Player', $data);
+        ]);
     }
 
     public function next(UpdatePlayerRequest $request, Player $player)
