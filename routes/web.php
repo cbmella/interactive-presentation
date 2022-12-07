@@ -8,6 +8,8 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
+use App\Http\Controllers\TestController;
+
 Route::resource('presentations', PresentationController::class);
 
 Route::get('presentations/{presentation}/player/{player}', [PresentationController::class, 'player'])->name('presentations.player');
@@ -22,6 +24,8 @@ Route::middleware('checktoken')->group(function () {
     Route::get('players/{token}/generate', [PlayerController::class, 'generate'])->name('players.generate');
     Route::put('players/{player}', [PlayerController::class, 'next'])->name('players.next');
 });
+
+Route::get('test/{slide}', [TestController::class, 'index'])->name('test');
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
