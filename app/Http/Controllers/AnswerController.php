@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Answer;
 use App\Http\Requests\StoreAnswerRequest;
 use App\Http\Requests\UpdateAnswerRequest;
+use Inertia\Inertia;
 
 class AnswerController extends Controller
 {
@@ -82,5 +83,22 @@ class AnswerController extends Controller
     public function destroy(Answer $answer)
     {
         //
+    }
+
+    public function correct(Answer $answer)
+    {
+        $correct_answer = $answer->question()->first()->answers()->where('is_correct', true)->first();
+
+        $data = [
+            'correct_answer' => $correct_answer,
+        ];
+
+        if ($answer->is_correct) {
+            $data['msg'] = 'Respuesta correcta';
+        } else {
+            $data['msg'] = 'Respuesta incorrecta';
+        }
+
+        return Inertia::render('Answer', $data);
     }
 }

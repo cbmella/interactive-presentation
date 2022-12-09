@@ -1,9 +1,11 @@
 <script setup>
+import PrimaryButton from '@/Components/PrimaryButton.vue'
 import { watchEffect } from 'vue';
 import { useForm } from '@inertiajs/inertia-vue3';
 import { useTimer } from "vue-timer-hook";
 
 const props = defineProps({
+  slide: Object,
   question: Object,
   answers: Object,
 });
@@ -20,20 +22,21 @@ const restart = () => {
 }
 
 const form = useForm({
+  slide: props.slide.id,
   question: props.question.id,
   answer: null,
   timeLeft: timer,
 });
 
 const submit = () => {
-  form.post(route('mobile.store.progress'), {
+  form.post(route('progress.store'), {
     onFinish: () => restart(),
   });
 };
 
 watchEffect(() => {
   if (timer.isExpired.value) {
-    //submit();
+    submit();
   }
 })
 </script>
@@ -52,6 +55,8 @@ watchEffect(() => {
       <h1 v-if="timer.seconds"> {{ timer.seconds }} </h1>
     </div>
 
-    <button :disabled="form.processing" class="">Siguiente</button>
+    <PrimaryButton class="" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+      Siguiente
+    </PrimaryButton>
   </form>
 </template>

@@ -4,83 +4,35 @@ namespace App\Http\Controllers;
 
 use App\Models\Progress;
 use App\Http\Requests\StoreProgressRequest;
-use App\Http\Requests\UpdateProgressRequest;
+use App\Models\Player;
+use App\Models\Slide;
+use Carbon\CarbonInterval;
+
 
 class ProgressController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StoreProgressRequest  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(StoreProgressRequest $request)
     {
-        //
-    }
+        $totalSecons = CarbonInterval::days($request->timeLeft['days'])->hours($request->timeLeft['hours'])->minutes($request->timeLeft['minutes'])->seconds($request->timeLeft['seconds'])->totalSeconds;
+        $slide = Slide::find($request->slide);
+        $question = $slide->question()->first();
+        $player = Player::find(session('player'))->first();
+        $score = $question->points * $totalSecons;
+        $answer = $question->answers()->where('id', $request->answer)->first();
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Progress  $progress
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Progress $progress)
-    {
-        //
-    }
+        if ($answer && !$answer->is_correct) {
+            $score = 0;
+        }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Progress  $progress
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Progress $progress)
-    {
-        //
-    }
+        if (!$player->progress()->where('slide_id', $slide->id)->first()) {
+            Progress::create([
+                'points' => $score,
+                'player_id' => $player->id,
+                'answer_id' => $request->answer,
+                'slide_id' => $slide->id,
+            ]);
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdateProgressRequest  $request
-     * @param  \App\Models\Progress  $progress
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdateProgressRequest $request, Progress $progress)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Progress  $progress
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Progress $progress)
-    {
-        //
+            return redirect()->route('answer.correct', ['answer' => $request->answer]);
+        }
     }
 }

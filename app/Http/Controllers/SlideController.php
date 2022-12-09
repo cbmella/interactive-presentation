@@ -66,9 +66,11 @@ class SlideController extends Controller
             'slide' => $slide,
         ];
 
-        if ($question) {
-            $data['question'] = $question;
-            $data['answers'] = $question->answers()->get();
+        if (!session('player')->progress()->where('slide_id', $slide->id)->first()) {
+            if ($question) {
+                $data['question'] = $question;
+                $data['answers'] = $question->answers()->get();
+            }
         }
 
         return Inertia::render('Active', $data);

@@ -23,4 +23,8 @@ class Player extends Model
         'updated_at',
     ];
 
+    public function progress()
+    {
+        return $this->hasMany(Progress::class);
+    }
 }

@@ -10,7 +10,8 @@ class Progress extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id',
+        'player_id',
+        'answer_id',
         'slide_id',
         'score',
     ];
@@ -18,12 +19,8 @@ class Progress extends Model
     protected $hidden = [
         'created_at',
         'updated_at',
-        'user_id',
+        'player_id',
+        'answer_id',
         'slide_id',
     ];
-
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
 }

@@ -24,7 +24,7 @@ const props = defineProps({
         {{ slide.content }}
       </p>
 
-      <Question v-if="question" :question="question" :answers="answers" />
+      <Question v-if="question" :slide="slide" :question="question" :answers="answers" />
     </div>
   </div>
 
