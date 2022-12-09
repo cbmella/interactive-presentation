@@ -60,8 +60,17 @@ class SlideController extends Controller
 
     public function active(Slide $slide)
     {
-        return Inertia::render('Slide', [
+        $question = $slide->question()->first();
+
+        $data = [
             'slide' => $slide,
-        ]);
+        ];
+
+        if ($question) {
+            $data['question'] = $question;
+            $data['answers'] = $question->answers()->get();
+        }
+
+        return Inertia::render('Active', $data);
     }
 }

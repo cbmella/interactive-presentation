@@ -25,6 +25,12 @@ class Slide extends Model
         return $this->belongsTo(Presentation::class);
     }
 
+    public function question()
+    {
+        return $this->hasOne(Question::class);
+    }
+
+
     public function nextSlide()
     {
         return $this->presentation->slides()->where('id', '>', $this->id)->first();

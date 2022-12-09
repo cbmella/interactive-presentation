@@ -10,7 +10,8 @@ class Presentation extends Model
     use HasFactory;
 
     protected $fillable = [
-        'title'
+        'title',
+        'video'
     ];
 
     protected $hidden = [
