@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('presentations', function (Blueprint $table) {
             $table->id();
             $table->string('title');
+            $table->string('video');
             $table->timestamps();
         });
     }

@@ -57,4 +57,11 @@ class SlideController extends Controller
         //aca mandar a la vista de score
         return redirect()->route('slides.show',  $slide->lastSlide());
     }
+
+    public function active(Slide $slide)
+    {
+        return Inertia::render('Slide', [
+            'slide' => $slide,
+        ]);
+    }
 }

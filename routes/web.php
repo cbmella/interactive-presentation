@@ -8,12 +8,10 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-use App\Http\Controllers\TestController;
-
+Route::get('presentations/{presentation}/video/player/{player}', [PresentationController::class, 'video'])->name('presentations.video');
+Route::get('presentations/qr', [PresentationController::class, 'qr'])->name('presentations.qr');
+Route::get('presentations/ready', [PresentationController::class, 'ready'])->name('presentations.ready');
 Route::resource('presentations', PresentationController::class);
-
-Route::get('presentations/{presentation}/player/{player}', [PresentationController::class, 'player'])->name('presentations.player');
-Route::get('presentations/ready/{presentation}', [PresentationController::class, 'ready'])->name('presentations.ready');
 
 Route::resource('slides', SlideController::class);
 Route::get('slides/next/{slide}', [SlideController::class, 'next'])->name('slides.next');
@@ -21,11 +19,10 @@ Route::get('slides/next/{slide}', [SlideController::class, 'next'])->name('slide
 Route::middleware('checktoken')->group(function () {
     Route::get('players/wait', [PlayerController::class, 'wait'])->name('players.wait');
     Route::resource('players', PlayerController::class);
-    Route::get('players/{token}/generate', [PlayerController::class, 'generate'])->name('players.generate');
+    Route::get('players/generate/{token}', [PlayerController::class, 'generate'])->name('players.generate');
     Route::put('players/{player}', [PlayerController::class, 'next'])->name('players.next');
+    Route::get('slides/active/{slide}', [SlideController::class, 'active'])->name('slides.active');
 });
-
-Route::get('test/{slide}', [TestController::class, 'index'])->name('test');
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [

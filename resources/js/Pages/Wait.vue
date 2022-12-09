@@ -43,7 +43,7 @@ window.Echo = new Echo({
 });
 
 window.Echo.private(`Player.${props.player.id}`).listen("activeSlide", (event) =>
-  Inertia.visit(route('slides.show', event.active_slide))
+  Inertia.visit(route('slides.active', event.active_slide))
 );
 </script>
 

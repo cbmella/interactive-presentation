@@ -1,17 +1,9 @@
 <script setup>
-import { ref, onMounted } from 'vue'
 import { Head, Link } from '@inertiajs/inertia-vue3';
 
 defineProps({
   presentation: Object,
 });
-
-/* onMounted(() => {
-  console.log('mounted');
-  window.Echo.channel('activeSlide').listen('player', (e) => {
-      console.log(e);
-    });
-}); */
 
 </script>
 
@@ -24,13 +16,18 @@ defineProps({
       <h1 class="text-6xl font-bold">
         {{ presentation.title }}
       </h1>
+      <video poster="https://epdigital.cl/Captura%20de%20pantalla%202022-11-09%20113224.png" autoplay muted
+        class="embed-responsive-item">
+        <source :src="presentation.video" type="video/mp4" />
+      </video>
       <Link
         class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150"
-        :href="route('presentations.ready', [presentation.id])">
-      Comenzar
+        :href="route('presentations.qr')">
+      Siguiente
       </Link>
     </div>
   </div>
 
 </template>
+
 

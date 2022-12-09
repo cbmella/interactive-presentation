@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Presentation;
 use App\Models\Player;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use App\Http\Requests\StorePresentationRequest;
 use App\Http\Requests\UpdatePresentationRequest;
 use App\Services\SlideService;
@@ -28,9 +29,7 @@ class PresentationController extends Controller
 
     public function show(Presentation $presentation)
     {
-        /*         return Inertia::render('Presentation', [
-            'presentation' => $presentation,
-        ]); */
+
     }
 
     public function edit(Presentation $presentation)
@@ -48,7 +47,7 @@ class PresentationController extends Controller
         //
     }
 
-    public function player(Presentation $presentation, $player)
+    public function video(Presentation $presentation, $player)
     {
         $player = Player::firstOrCreate(
             ['key' => $player],
@@ -60,15 +59,27 @@ class PresentationController extends Controller
         session([
             'player' => $player,
             'token' => $token,
+            'presentation' => $presentation,
         ]);
-        return Inertia::render('Presentation', [
+        return Inertia::render('Video', [
             'presentation' => $presentation,
         ]);
     }
 
-    public function ready(Presentation $presentation, SlideService $slideService)
+
+    public function qr()
     {
-        $slide = $slideService->getSlide($presentation->firstSlide());
+        $url = route('players.generate', ['token' => session('token')]);
+        $qr = 'data:image/svg+xml;base64,' . base64_encode(QrCode::format('svg')->size(100)->generate($url));
+
+        return Inertia::render('QR', [
+            'qr' => $qr,
+        ]);
+    }
+
+    public function ready(SlideService $slideService)
+    {
+        $slide = $slideService->getSlide(session('presentation')->firstSlide());
         return redirect()->route('slides.show', $slide);
     }
 }
