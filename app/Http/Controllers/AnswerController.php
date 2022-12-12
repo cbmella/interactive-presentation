@@ -91,18 +91,18 @@ class AnswerController extends Controller
         $question = $answer->question()->first();
         if (!$question) {
             // Si no existe, devolvemos un valor predeterminado
-            $data['msg'] = 'no se envio una respuesta';
+            return Inertia::render('Answer', [
+                'msg' => 'no se envio una respuesta'
+            ]);
         } else {
             // Si la pregunta existe, obtenemos la respuesta correcta
             $correct_answer = $question->answers()->where('is_correct', true)->first();
-
-            $data = [
+    
+            return Inertia::render('Answer', [
                 'correct_answer' => $correct_answer,
-            ];
-
-            $data['msg'] = $answer->is_correct ? 'Tu respuesta es correcta' : 'Tu respuesta es incorrecta';
+                'msg' => $answer->is_correct ? 'Tu respuesta es correcta' : 'Tu respuesta es incorrecta'
+            ]);
         }
-
-        return Inertia::render('Answer', $data);
     }
+    
 }
