@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('key')->nullable();
             $table->string('avatar')->nullable();
             $table->bigInteger('active_slide')->nullable();
+            $table->foreignId('presentation_id')->nullable()->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }

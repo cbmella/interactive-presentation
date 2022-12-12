@@ -24,7 +24,7 @@ class StoreProgressRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'answer.required' => 'Debe seleccionar una respuesta',
         ];
     }
 }

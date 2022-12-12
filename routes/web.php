@@ -26,7 +26,7 @@ Route::middleware('checktoken')->group(function () {
     Route::put('players/{player}', [PlayerController::class, 'next'])->name('players.next');
     Route::get('slides/active/{slide}', [SlideController::class, 'active'])->name('slides.active');
     Route::post('progress', [ProgressController::class, 'store'])->name('progress.store');
-    Route::get('answers/correct/{answer}', [AnswerController::class, 'correct'])->name('answer.correct');
+    Route::get('answers/correct/{answer?}', [AnswerController::class, 'correct'])->name('answer.correct');
 });
 
 Route::get('/', function () {

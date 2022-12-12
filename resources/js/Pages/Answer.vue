@@ -1,7 +1,7 @@
 <script setup>
 import { Head } from '@inertiajs/inertia-vue3';
 
-const props = defineProps({
+defineProps({
   correct_answer: Object,
   msg: String,
 });
@@ -14,9 +14,11 @@ const props = defineProps({
 
   <div class="container-fluid vh-100 d-flex flex-column">
     <div class="row my-auto">
-      <div class="col text-center">
+      <div v-if="correct_answer" class="col text-center">
+        {{ msg }} <br>
         la respuesta correcta es : {{ correct_answer.content }}
-        <br>
+      </div>
+      <div v-else class="col text-center">
         {{ msg }}
       </div>
     </div>

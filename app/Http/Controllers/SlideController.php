@@ -58,7 +58,7 @@ class SlideController extends Controller
         $question = $slide->question()->first();
 
         if ($question) {
-            $chartdata = $chartService->getChartdata($question->first()->answers()->get());
+            $chartdata = $chartService->getChartdata($question->answers()->get());
             $data = array_merge($data, [
                 'question' => $question,
             ]);

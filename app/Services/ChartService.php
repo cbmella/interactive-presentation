@@ -29,7 +29,7 @@ class ChartService
                     'align' => 'end',
                     'labels' => [
                         'value' => [
-                            'color' => 'white',
+                            'color' => 'black',
                             'font' => [
                                 'size' => 65,
                                 'weight' => 'bold',
@@ -55,8 +55,8 @@ class ChartService
                     'display' => true,
                     'grid' => [
                         'display' => false,
-                        'color' => 'white',
-                        'borderColor' => 'white',
+                        'color' => 'black',
+                        'borderColor' => 'black',
                         'borderWidth' => 4,
                     ],
                     'ticks' => [
