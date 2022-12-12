@@ -6,6 +6,7 @@ use App\Models\Slide;
 use App\Http\Requests\StoreSlideRequest;
 use App\Http\Requests\UpdateSlideRequest;
 use App\Services\SlideService;
+use App\Services\ChartService;
 use Inertia\Inertia;
 
 class SlideController extends Controller
@@ -48,31 +49,53 @@ class SlideController extends Controller
         //
     }
 
+    public function render(Slide $slide, ChartService $chartService)
+    {
+        $data = [
+            'slide' => $slide,
+        ];
+
+        $question = $slide->question()->first();
+
+        if ($question) {
+            $chartdata = $chartService->getChartdata($question->first()->answers()->get());
+            $data = array_merge($data, [
+                'question' => $question,
+            ]);
+            $data = array_merge($data, $chartdata);
+        }
+
+        return Inertia::render('Slide', $data);
+    }
+
     public function next(Slide $slide, SlideService $slideService)
     {
         if ($slide->nextSlide()) {
             $slide = $slideService->getSlide($slide->nextSlide());
-            return redirect()->route('slides.show', $slide);
+            return redirect()->route('slides.render', $slide);
         }
         //aca mandar a la vista de score
-        return redirect()->route('slides.show',  $slide->lastSlide());
+        return redirect()->route('slides.render',  $slide->lastSlide());
     }
 
     public function active(Slide $slide)
     {
         $question = $slide->question()->first();
 
-        $data = [
-            'slide' => $slide,
-        ];
-
         if (!session('player')->progress()->where('slide_id', $slide->id)->first()) {
-            if ($question) {
-                $data['question'] = $question;
-                $data['answers'] = $question->answers()->get();
+            if (!$question) {
+                return Inertia::render('Active', [
+                    'slide' => $slide,
+                ]);
             }
+            return Inertia::render('Active', [
+                'slide' => $slide,
+                'question' => $question,
+                'answers' => $question->answers()->get(),
+            ]);
         }
 
-        return Inertia::render('Active', $data);
+        session()->forget('_previous', url()->previous());
+        return redirect()->route('players.wait');
     }
 }

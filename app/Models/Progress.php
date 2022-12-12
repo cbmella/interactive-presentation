@@ -23,4 +23,15 @@ class Progress extends Model
         'answer_id',
         'slide_id',
     ];
+
+    public function scopeSumScorePerPlayer($query, $presentation)
+    {
+        return $query->select('players.name', \DB::raw('SUM(score) as score'))
+            ->join('players', 'players.id', '=', 'progress.player_id')
+            ->join('presentation', 'presentation.id', '=', 'players.presentation_id')
+            ->where('presentation.id', '=', $presentation)
+            ->groupBy('player_id')
+            ->orderBy('score', 'desc')
+            ->get();
+    } 
 }

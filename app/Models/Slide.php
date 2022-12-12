@@ -40,4 +40,6 @@ class Slide extends Model
     {
         return $this->presentation->slides()->orderBy('id', 'desc')->first();
     }
+
+    
 }

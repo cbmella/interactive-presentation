@@ -12,11 +12,12 @@ use Inertia\Inertia;
 
 Route::get('presentations/{presentation}/video/player/{player}', [PresentationController::class, 'video'])->name('presentations.video');
 Route::get('presentations/qr', [PresentationController::class, 'qr'])->name('presentations.qr');
-Route::get('presentations/ready', [PresentationController::class, 'ready'])->name('presentations.ready');
+Route::get('presentations/fist', [PresentationController::class, 'fistSlide'])->name('presentations.fistSlide');
 Route::resource('presentations', PresentationController::class);
 
 Route::resource('slides', SlideController::class);
 Route::get('slides/next/{slide}', [SlideController::class, 'next'])->name('slides.next');
+Route::get('slides/render/{slide}', [SlideController::class, 'render'])->name('slides.render');
 
 Route::middleware('checktoken')->group(function () {
     Route::get('players/wait', [PlayerController::class, 'wait'])->name('players.wait');

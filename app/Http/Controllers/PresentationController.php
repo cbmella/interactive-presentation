@@ -29,7 +29,6 @@ class PresentationController extends Controller
 
     public function show(Presentation $presentation)
     {
-
     }
 
     public function edit(Presentation $presentation)
@@ -66,7 +65,6 @@ class PresentationController extends Controller
         ]);
     }
 
-
     public function qr()
     {
         $url = route('players.generate', ['token' => session('token')]);
@@ -77,9 +75,10 @@ class PresentationController extends Controller
         ]);
     }
 
-    public function ready(SlideService $slideService)
+    public function fistSlide(SlideService $slideService)
     {
         $slide = $slideService->getSlide(session('presentation')->firstSlide());
-        return redirect()->route('slides.show', $slide);
+
+        return redirect()->route('slides.render', $slide);
     }
 }

@@ -18,4 +18,9 @@ class Answer extends Model
     {
         return $this->belongsTo(Question::class);
     }
+
+    public function progress()
+    {
+        return $this->hasMany(Progress::class);
+    }
 }
