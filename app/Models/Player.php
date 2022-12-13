@@ -15,7 +15,8 @@ class Player extends Model
         'name',
         'key',
         'avatar',
-        'active_slide'
+        'active_slide',
+        'presentation_id',
     ];
 
     protected $hidden = [
@@ -24,6 +25,11 @@ class Player extends Model
     ];
 
     public function progress()
+    {
+        return $this->hasMany(Progress::class);
+    }
+
+    public function progresses()
     {
         return $this->hasMany(Progress::class);
     }

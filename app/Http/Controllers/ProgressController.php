@@ -7,6 +7,7 @@ use App\Models\Player;
 use App\Models\Slide;
 use Carbon\CarbonInterval;
 
+
 class ProgressController extends Controller
 {
     /**
@@ -17,11 +18,11 @@ class ProgressController extends Controller
      */
     public function store(StoreProgressRequest $request)
     {
+
         // Obtiene el modelo Player, Slide y Answer relevantes
         $slide = Slide::find($request->slide);
         $question = $slide->question()->first();
-        $player = Player::find(session('player'))->first();
-
+        $player = session('player');
         // Calcula la puntuación del jugador
         $score = $question->points * CarbonInterval::days($request->timeLeft['days'])
             ->hours($request->timeLeft['hours'])
@@ -29,10 +30,10 @@ class ProgressController extends Controller
             ->seconds($request->timeLeft['seconds'])
             ->totalSeconds;
 
+
         $answer = $question->answers()->where('id', $request->answer)->first();
         // Si la respuesta es incorrecta o no existe alguna respuesta, la puntuación se establece en cero
         $score = ($answer && !$answer->is_correct) ? 0 : $score;
-
         // Si no se ha registrado el progreso del jugador en esta diapositiva, se crea un nuevo registro Progress en la base de datos
         if (!$player->progress()->where('slide_id', $slide->id)->first()) {
 

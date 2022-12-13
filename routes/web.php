@@ -13,6 +13,7 @@ use Inertia\Inertia;
 Route::get('presentations/{presentation}/video/player/{player}', [PresentationController::class, 'video'])->name('presentations.video');
 Route::get('presentations/qr', [PresentationController::class, 'qr'])->name('presentations.qr');
 Route::get('presentations/fist', [PresentationController::class, 'fistSlide'])->name('presentations.fistSlide');
+Route::get('presentations/top', [PresentationController::class, 'top'])->name('presentations.top');
 Route::resource('presentations', PresentationController::class);
 
 Route::resource('slides', SlideController::class);

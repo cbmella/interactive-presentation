@@ -4,11 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Presentation;
 use App\Models\Player;
+
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use App\Http\Requests\StorePresentationRequest;
 use App\Http\Requests\UpdatePresentationRequest;
 use App\Services\SlideService;
 use Inertia\Inertia;
+
+use function GuzzleHttp\Promise\all;
 
 class PresentationController extends Controller
 {
@@ -81,4 +84,24 @@ class PresentationController extends Controller
 
         return redirect()->route('slides.render', $slide);
     }
+
+
+    public function top()
+    {
+        $presentation = session('presentation');
+        $players = $presentation->players()->with('progresses')->get();
+    
+        $total_points = $players->sum(function ($player) {
+            return $player->progresses->sum('points');
+        });
+    
+        return [
+            'presentation' => $presentation,
+            'total_points' => $total_points,
+        ];
+    }
+    
+    
+    
+    
 }

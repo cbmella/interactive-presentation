@@ -28,4 +28,9 @@ class Presentation extends Model
     {
         return $this->slides()->first();
     }
+    
+    public function players()
+    {
+        return $this->hasMany(Player::class);
+    }
 }

@@ -95,7 +95,7 @@ class SlideController extends Controller
             ]);
         }
 
-        session()->forget('_previous', url()->previous());
+        /* session()->forget('_previous', url()->previous()); */
         return redirect()->route('players.wait');
     }
 }
