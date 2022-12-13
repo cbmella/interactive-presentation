@@ -14,7 +14,6 @@ Route::get('presentations/{presentation}/video/player/{player}', [PresentationCo
 Route::get('presentations/qr', [PresentationController::class, 'qr'])->name('presentations.qr');
 Route::get('presentations/fist', [PresentationController::class, 'fistSlide'])->name('presentations.fistSlide');
 Route::get('presentations/top', [PresentationController::class, 'top'])->name('presentations.top');
-Route::resource('presentations', PresentationController::class);
 
 Route::resource('slides', SlideController::class);
 Route::get('slides/next/{slide}', [SlideController::class, 'next'])->name('slides.next');
@@ -47,6 +46,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::resource('presentations', PresentationController::class);
 });
 
 require __DIR__ . '/auth.php';

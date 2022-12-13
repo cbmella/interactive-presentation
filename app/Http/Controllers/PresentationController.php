@@ -11,42 +11,56 @@ use App\Http\Requests\UpdatePresentationRequest;
 use App\Services\SlideService;
 use Inertia\Inertia;
 
-use function GuzzleHttp\Promise\all;
 
 class PresentationController extends Controller
 {
     public function index()
     {
-        //
+        $presentations = Presentation::all();
+
+        return Inertia::render('Presentations/Index', [
+            'presentations' => $presentations,
+        ]);
     }
 
     public function create()
     {
-        //
+        return Inertia::render('Presentations/Create');
     }
 
     public function store(StorePresentationRequest $request)
     {
-        //
+        $presentation = Presentation::create($request->validated());
+
+        return redirect()->route('presentations.index');
     }
 
     public function show(Presentation $presentation)
     {
+        return Inertia::render('Presentations/Show', [
+            'presentation' => $presentation,
+        ]);
     }
 
     public function edit(Presentation $presentation)
     {
-        //
+        return Inertia::render('Presentations/Edit', [
+            'presentation' => $presentation,
+        ]);
     }
 
     public function update(UpdatePresentationRequest $request, Presentation $presentation)
     {
-        //
+        $presentation->update($request->validated());
+
+        return redirect()->route('presentations.index');
     }
 
     public function destroy(Presentation $presentation)
     {
-        //
+        $presentation->delete();
+
+        return redirect()->route('presentations.index');
     }
 
     public function video(Presentation $presentation, $player)
