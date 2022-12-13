@@ -18,7 +18,6 @@ class ProgressController extends Controller
      */
     public function store(StoreProgressRequest $request)
     {
-
         // Obtiene el modelo Player, Slide y Answer relevantes
         $slide = Slide::find($request->slide);
         $question = $slide->question()->first();

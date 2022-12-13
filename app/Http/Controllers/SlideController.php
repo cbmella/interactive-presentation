@@ -75,7 +75,7 @@ class SlideController extends Controller
             return redirect()->route('slides.render', $slide);
         }
         //aca mandar a la vista de score
-        return redirect()->route('slides.render',  $slide->lastSlide());
+        return redirect()->route('presentations.top');
     }
 
     public function active(Slide $slide)

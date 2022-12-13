@@ -52,7 +52,7 @@ class PresentationController extends Controller
     public function video(Presentation $presentation, $player)
     {
         $player = Player::firstOrCreate(
-            ['key' => $player],
+            ['presentation_id' => $presentation->id, 'key' => $player],
             ['key' => $player]
         );
 
@@ -85,23 +85,14 @@ class PresentationController extends Controller
         return redirect()->route('slides.render', $slide);
     }
 
-
     public function top()
     {
         $presentation = session('presentation');
-        $players = $presentation->players()->with('progresses')->get();
-    
-        $total_points = $players->sum(function ($player) {
-            return $player->progresses->sum('points');
-        });
-    
-        return [
-            'presentation' => $presentation,
-            'total_points' => $total_points,
-        ];
+
+        $topPlayers = $presentation->players()->topPlayers()->get();
+
+        return Inertia::render('Top', [
+            'topPlayers' => $topPlayers,
+        ]);
     }
-    
-    
-    
-    
 }

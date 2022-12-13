@@ -29,8 +29,16 @@ class Player extends Model
         return $this->hasMany(Progress::class);
     }
 
-    public function progresses()
+
+
+    public function scopeTopPlayers($query, $limit = 10)
     {
-        return $this->hasMany(Progress::class);
+        return $query
+            ->select('name')
+            ->selectRaw('SUM(points) as points')
+            ->join('progress', 'players.id', '=', 'progress.player_id')
+            ->groupBy('players.id', 'players.name')
+            ->orderByDesc('points')
+            ->limit($limit);
     }
 }
